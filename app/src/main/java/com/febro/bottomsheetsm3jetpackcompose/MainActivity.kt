@@ -1,21 +1,29 @@
 package com.febro.bottomsheetsm3jetpackcompose
 
+import android.media.Image
 import android.os.Bundle
+import android.view.Surface
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.gestures.detectTapGestures
+import androidx.compose.foundation.gestures.scrollable
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.febro.bottomsheetsm3jetpackcompose.ui.theme.BottomSheetsM3JetpackComposeTheme
 import kotlinx.coroutines.launch
+
+/* SOME STASHED CODE GOES HERE */
 
 class MainActivity : ComponentActivity() {
     @OptIn(ExperimentalMaterial3Api::class)
@@ -30,26 +38,81 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    val sheetState = rememberModalBottomSheetState()
-                    var isSheetOpen by rememberSaveable {
-                        mutableStateOf(false)
-                    }
-
-                    val scaffoldState = rememberBottomSheetScaffoldState()
+                    val scaffoldState = rememberBottomSheetScaffoldState(
+                        bottomSheetState = rememberStandardBottomSheetState(
+                            skipHiddenState = false,
+                        )
+                    )
+                    val scroll = rememberScrollState()
                     val scope = rememberCoroutineScope()
-                    
+
                     BottomSheetScaffold(
                         scaffoldState = scaffoldState,
                         sheetContent = {
-                            Image(
-                                painter = painterResource(id = R.drawable.hello),
-                                contentDescription = null
-                            )
+                            Column(
+                                modifier = Modifier
+                                    .fillMaxHeight(.7f)
+                                    .verticalScroll(scroll)
+                            ) {
+                                Column(
+                                    modifier = Modifier
+                                ) {
+                                    Image(
+                                        painter = painterResource(id = R.drawable.hello),
+                                        contentDescription = null
+                                    )
+                                    Image(
+                                        painter = painterResource(id = R.drawable.hello),
+                                        contentDescription = null
+                                    )
+                                    Image(
+                                        painter = painterResource(id = R.drawable.hello),
+                                        contentDescription = null
+                                    )
+                                    Image(
+                                        painter = painterResource(id = R.drawable.hello),
+                                        contentDescription = null
+                                    )
+                                    Image(
+                                        painter = painterResource(id = R.drawable.hello),
+                                        contentDescription = null
+                                    )
+                                }
+
+                                Box(
+                                    modifier = Modifier
+                                        .fillMaxWidth().padding(16.dp),
+                                    contentAlignment = Alignment.Center
+                                ) {
+                                    Button(onClick = {
+                                        scope.launch {
+                                            scaffoldState.bottomSheetState.hide()
+                                        }
+                                    }) {
+                                        Text(text = "Open sheet")
+                                    }
+                                }
+
+
+                            }
+
                         },
-                        sheetPeekHeight = 0.dp
-                        ) {
+                        sheetPeekHeight = 0.dp,
+                        sheetShadowElevation = 15.dp,
+                        modifier = Modifier.pointerInput(Unit) {
+                            detectTapGestures(onTap = {
+                                scope.launch {
+                                    if (scaffoldState.bottomSheetState.isVisible) {
+                                        scaffoldState.bottomSheetState.hide()
+                                    }
+                                }
+                            })
+                        }
+                    ) { paddingValues ->
                         Box(
-                            modifier = Modifier.fillMaxSize(),
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .padding(paddingValues),
                             contentAlignment = Alignment.Center
                         ) {
                             Button(onClick = {
@@ -61,20 +124,6 @@ class MainActivity : ComponentActivity() {
                             }
                         }
                     }
-
-//                    if(isSheetOpen) {
-//                        ModalBottomSheet(
-//                            sheetState = sheetState,
-//                            onDismissRequest = {
-//                                isSheetOpen = false
-//                            }
-//                        ) {
-//                            Image(
-//                                painter = painterResource(id = R.drawable.hello),
-//                                contentDescription = null
-//                            )
-//                        }
-//                    }
 
                 }
             }
