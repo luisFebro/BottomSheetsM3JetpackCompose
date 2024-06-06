@@ -38,75 +38,55 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    val scaffoldState = rememberBottomSheetScaffoldState(
+                    val scaffoldState: BottomSheetScaffoldState = rememberBottomSheetScaffoldState(
                         bottomSheetState = rememberStandardBottomSheetState(
-                            skipHiddenState = false,
+                            skipHiddenState = false, // if true, error (Attempted to animate to hidden when skipHiddenState was enabled. Set skipHiddenState to false to use this func) is produced
                         )
                     )
-                    val scroll = rememberScrollState()
                     val scope = rememberCoroutineScope()
 
-                    BottomSheetScaffold(
+                    BottomSheetComp(
                         scaffoldState = scaffoldState,
                         sheetContent = {
                             Column(
                                 modifier = Modifier
-                                    .fillMaxHeight(.7f)
-                                    .verticalScroll(scroll)
                             ) {
-                                Column(
-                                    modifier = Modifier
-                                ) {
-                                    Image(
-                                        painter = painterResource(id = R.drawable.hello),
-                                        contentDescription = null
-                                    )
-                                    Image(
-                                        painter = painterResource(id = R.drawable.hello),
-                                        contentDescription = null
-                                    )
-                                    Image(
-                                        painter = painterResource(id = R.drawable.hello),
-                                        contentDescription = null
-                                    )
-                                    Image(
-                                        painter = painterResource(id = R.drawable.hello),
-                                        contentDescription = null
-                                    )
-                                    Image(
-                                        painter = painterResource(id = R.drawable.hello),
-                                        contentDescription = null
-                                    )
-                                }
-
-                                Box(
-                                    modifier = Modifier
-                                        .fillMaxWidth().padding(16.dp),
-                                    contentAlignment = Alignment.Center
-                                ) {
-                                    Button(onClick = {
-                                        scope.launch {
-                                            scaffoldState.bottomSheetState.hide()
-                                        }
-                                    }) {
-                                        Text(text = "Open sheet")
-                                    }
-                                }
-
-
+                                Image(
+                                    painter = painterResource(id = R.drawable.hello),
+                                    contentDescription = null
+                                )
+                                Image(
+                                    painter = painterResource(id = R.drawable.hello),
+                                    contentDescription = null
+                                )
+                                Image(
+                                    painter = painterResource(id = R.drawable.hello),
+                                    contentDescription = null
+                                )
+                                Image(
+                                    painter = painterResource(id = R.drawable.hello),
+                                    contentDescription = null
+                                )
+                                Image(
+                                    painter = painterResource(id = R.drawable.hello),
+                                    contentDescription = null
+                                )
                             }
 
-                        },
-                        sheetPeekHeight = 0.dp,
-                        sheetShadowElevation = 15.dp,
-                        modifier = Modifier.pointerInput(Unit) {
-                            detectTapGestures(onTap = {
-                                scope.launch {
-                                    if (scaffoldState.bottomSheetState.isVisible) {
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(16.dp),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                Button(onClick = {
+                                    scope.launch {
                                         scaffoldState.bottomSheetState.hide()
                                     }
+                                }) {
+                                    Text(text = "Open sheet")
                                 }
-                            })
+                            }
                         }
                     ) { paddingValues ->
                         Box(
@@ -124,7 +104,6 @@ class MainActivity : ComponentActivity() {
                             }
                         }
                     }
-
                 }
             }
         }
